@@ -3,28 +3,30 @@ const {verifyToken} = require('../helpers/jwt')
 
 const authentication = async (req, res, next) => {
     try {
-      if (!req.headers.access_token) {
-        throw { name: "JsonWebTokenError" };
-      } else {
-        const { access_token: accessToken } = req.headers;
-        const payload = verifyToken(accessToken);
-        const userEmail = payload.email;
-        const findUser = await User.findOne({
+      const {acces_token: token} = req.headers;
+      //verifikasi token
+      const payload = verifyToken(token)
+      //validasi ke user
+      const foundUser = await User.findOne({
           where: {
-            email: userEmail,
-          },
-        });
-        if (!findUser) {
-          throw { name: "Forbidden" };
-        } else {
-          req.user = {
-            id: findUser.id,
-            email: findUser.email,
-          };
-  
-          next();
-        }
+              id: payload.id,
+              email: payload.email
+          }
+      })
+      //user tidak ada di database
+      if (!foundUser) {
+          throw {name: 'user cant acces'}
       }
+      //kasih penanda
+      req.user = {
+          id: foundUser.id,
+          email: foundUser.email,
+          role: foundUser.role
+      }
+
+      //boleh acces
+      next()
+        
     } catch (err) {
       next(err);
     }
