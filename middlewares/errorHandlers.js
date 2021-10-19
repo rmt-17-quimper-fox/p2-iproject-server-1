@@ -18,6 +18,10 @@ const errorHandler = (err, req, res, next) => {
       case "LoginFailed":
       res.status(401).json({ message: "Invalid Email/Password" });
       break;
+      case 'SequelizeDatabaseError':
+      case "NotFound":
+        res.status(404).json({ message: "Products Id Not found" });
+        break;
 
     default:
       res.status(500).json({ message: "internal server error" });
