@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Product.belongsTo(models.Category, {foreignKey: 'categoryId'})
+      Product.belongsTo(models.User, {foreignKey: 'authorId'})
       Product.belongsToMany(models.User, {
         through: models.Cart,
         foreignKey: 'productId'
@@ -74,16 +75,26 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    authorId:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Author is required'
+        },
+        notNull:{
+          msg: 'Author is required'
+        }
+      }
+    },
     categoryId:{
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: {
-          args: true,
           msg: 'categoryId is required'
         },
         notNull:{
-          args: true,
           msg: 'categoryId is required'
         }
       }
