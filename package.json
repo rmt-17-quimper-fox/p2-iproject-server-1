@@ -24,6 +24,7 @@
     "express": "^4.17.1",
     "form-data": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
+    "midtrans-client": "^1.2.5",
     "multer": "^1.4.3",
     "nodemailer": "^6.7.0",
     "pg": "^8.7.1",

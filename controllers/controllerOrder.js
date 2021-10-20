@@ -66,11 +66,12 @@ class OrderController {
   }
   static async detailCart(req, res, next) {
     try {
-      const id = Number(req.params.id);
-      if (!id) {
+      const cartId = Number(req.params.cartId);
+      if (!cartId) {
         throw { name: "cart NotFound" };
       }
-      const foundCart = await Cart.findByPk(id, {
+      const foundCart = await Cart.findOne({
+        where: { id: cartId },
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
           {
@@ -119,17 +120,17 @@ class OrderController {
   }
   static async deleteCart(req, res, next) {
     try {
-      const id = Number(req.params.id);
-      if (!id) {
+      const cartId = Number(req.params.cartId);
+      if (!cartId) {
         throw { name: "CartNotFound" };
       }
-      const deleteCart = await Cart.destroy({ where: { id } });
+      const deleteCart = await Cart.destroy({ where: { id: cartId } });
       if (!deleteCart) {
-        throw {name: 'NotFound'}
+        throw { name: "NotFound" };
       }
-    res.status(200).json({message: `Succes Remove from Cart`})
+      res.status(200).json({ message: `Succes Remove from Cart` });
     } catch (err) {
-        console.log(err);
+      console.log(err);
       next(err);
     }
   }
