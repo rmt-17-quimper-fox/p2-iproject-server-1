@@ -33,7 +33,9 @@ const errorHandler = (err, req, res, next) => {
     case "cart NotFound":
       res.status(404).json({ message: "Cart Not Found" });
       break;
-
+    case 'CartNotFound':
+      res.status(404).json({ message: "Cart NotFound" });
+      break;
     default:
       res.status(500).json({ message: "internal server error" });
       break;

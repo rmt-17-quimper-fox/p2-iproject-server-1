@@ -75,7 +75,15 @@ class OrderController {
         include: [
           {
             model: Product,
-            attributes: { exclude: ["id", "createdAt", "updatedAt", 'authorId', "categoryId"] },
+            attributes: {
+              exclude: [
+                "id",
+                "createdAt",
+                "updatedAt",
+                "authorId",
+                "categoryId",
+              ],
+            },
             include: [
               {
                 model: Category,
@@ -106,6 +114,22 @@ class OrderController {
       res.status(200).json(foundCart);
     } catch (err) {
       console.log(err);
+      next(err);
+    }
+  }
+  static async deleteCart(req, res, next) {
+    try {
+      const id = Number(req.params.id);
+      if (!id) {
+        throw { name: "CartNotFound" };
+      }
+      const deleteCart = await Cart.destroy({ where: { id } });
+      if (!deleteCart) {
+        throw {name: 'NotFound'}
+      }
+    res.status(200).json({message: `Succes Remove from Cart`})
+    } catch (err) {
+        console.log(err);
       next(err);
     }
   }
