@@ -1,5 +1,5 @@
 
-const {Cart} = require('../models')
+const {Cart, Product} = require('../models')
 const authorization = async (req,res,next) => {
     try { 
         const {role} = req.user
@@ -11,6 +11,22 @@ const authorization = async (req,res,next) => {
         next(err)
     }
 }
+
+const authorizationAdmin = async (req, res, next) => {
+    try {
+        const { id } = req.user
+        const productId = Number(req.params.productId);
+        const product = await Product.findOne({ where: { id: productId || null } });
+        if(id !== product.authorId) {
+            throw {name: 'CustUnauthorized'}
+        }
+          next()
+      } catch (err) {
+          console.log(err);
+          next(err)
+      }
+}
+
 const authorizzationCustomer = async (req, res, next) => {
     try {
       const { id } = req.user
@@ -28,5 +44,6 @@ const authorizzationCustomer = async (req, res, next) => {
 
 module.exports = {
     authorization,
-    authorizzationCustomer
+    authorizzationCustomer,
+    authorizationAdmin
 }
