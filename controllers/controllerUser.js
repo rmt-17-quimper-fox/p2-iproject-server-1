@@ -92,12 +92,12 @@ class ControllerUser {
       if(!productId) {
         throw {name: 'bad request'}
       }
-      const findProduct = await Product.findByPk(productId)
+ 
       const deleteProduct = await Product.destroy({ where: { id: productId } });
       if(!deleteProduct) {
         throw {name: 'NotFound'}
       }
-      res.status(200).json({message: `Product  with name ${findProduct.name} & id ${findProduct.id} has been deleted`})
+      res.status(200).json({message: `Product has been Deleted`})
     } catch (err) {
       next(err)
     }

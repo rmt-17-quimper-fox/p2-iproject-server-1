@@ -8,6 +8,8 @@ router.use(authentication)
 router.post('/customer/:productId', OrderController.checkout)
 router.get('/customer/cart', OrderController.allMyCart)
 router.get('/customer/:id', OrderController.detailCart)
+router.delete('/customer/:id', OrderController.deleteCart)
+
 
 
 
