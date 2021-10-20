@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Product, Category } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { comparePassword } = require("../helpers/bCrypt");
 const sendEmail = require("../helpers/nodemailer");
@@ -53,9 +53,39 @@ class ControllerCustomer {
   }
   static async showAllProducts(req, res, next) {
       try {
-          
+        const result = await Product.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt', ]},
+            order: [['updatedAt', 'ASC']]
+        })
+      res.status(200).json(result);
       } catch (err) {
-          
+          console.log(err);
+        next(err)
+      }
+  }
+  static async detailProducts(req,res,next) {
+      try {
+          const productId = Number(req.params.productId)
+          if (!productId) {
+            throw {name: 'bad request'}
+          }
+          const result = await Product.findOne({
+              where: {id: productId},
+              attributes: {exclude: ['createdAt', 'updatedAt', ]},
+              include: [{
+                model: Category,
+                attributes: {exclude: ['id', 'createdAt', 'updatedAt']},
+              },
+              {
+                model: User,
+                attributes: {exclude: ['createdAt', 'updatedAt', 'id', 'username', 'password', 'address', 'gender', 'role']},
+              }
+            ]
+          })
+          res.status(200).json(result);
+      } catch (err) {
+          console.log(err);
+          next(err)
       }
   }
 }
