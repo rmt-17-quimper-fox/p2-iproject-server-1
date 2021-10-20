@@ -59,7 +59,7 @@ class ControllerCustomer {
         })
       res.status(200).json(result);
       } catch (err) {
-          console.log(err);
+        //   console.log(err);
         next(err)
       }
   }
@@ -84,7 +84,7 @@ class ControllerCustomer {
           })
           res.status(200).json(result);
       } catch (err) {
-          console.log(err);
+        //   console.log(err);
           next(err)
       }
   }
