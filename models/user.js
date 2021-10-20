@@ -11,8 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      User.hasMany(models.Product, {foreignKey: 'authorId'})
       User.belongsToMany(models.Product, {
         through: models.Cart,
+        as: 'user',
         foreignKey: 'userId'
       })
     }
@@ -112,6 +114,18 @@ module.exports = (sequelize, DataTypes) => {
         },
         notNull: {
          msg: 'Gender is required'
+        }
+      }
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+         msg: 'Role is required'
+        },
+        notNull: {
+         msg: 'Role is required'
         }
       }
     }
