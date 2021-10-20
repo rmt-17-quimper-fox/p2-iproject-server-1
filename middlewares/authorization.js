@@ -1,6 +1,7 @@
 
+const {Cart} = require('../models')
 const authorization = async (req,res,next) => {
-    try { //nambahin authorisasi untuk delete dan update cek role dan author ID dari req.userid
+    try { 
         const {role} = req.user
         if ( role !== 'Admin' ) {
             throw{name: 'Unauthorized'}
@@ -10,4 +11,22 @@ const authorization = async (req,res,next) => {
         next(err)
     }
 }
-module.exports = authorization
+const authorizzationCustomer = async (req, res, next) => {
+    try {
+      const { id } = req.user
+      const cartId = Number(req.params.cartId);
+        // console.log(id, '<<<<<<<==========');
+      const cart = await Cart.findOne({ where: { id: cartId || null } });
+      if(id !== cart.userId) {
+          throw {name: 'CustUnauthorized'}
+      }
+        next()
+    } catch (err) {
+        next(err)
+    }
+}
+
+module.exports = {
+    authorization,
+    authorizzationCustomer
+}

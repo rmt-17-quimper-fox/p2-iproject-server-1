@@ -36,6 +36,9 @@ const errorHandler = (err, req, res, next) => {
     case 'CartNotFound':
       res.status(404).json({ message: "Cart NotFound" });
       break;
+      case 'CustUnauthorized':
+      res.status(404).json({ message: "can't access" });
+      break;
     default:
       res.status(500).json({ message: "internal server error" });
       break;
