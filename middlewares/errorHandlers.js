@@ -18,10 +18,15 @@ const errorHandler = (err, req, res, next) => {
       case "LoginFailed":
       res.status(401).json({ message: "Invalid Email/Password" });
       break;
-      case 'SequelizeDatabaseError':
+      case 'bad request':
+        res.status(400).json({ message: "Id Not found" });
+        break;
       case "NotFound":
         res.status(404).json({ message: "Products Id Not found" });
         break;
+        case "Unauthorized":
+          res.status(403).json({ message: "only Admin can access" });
+          break;
 
     default:
       res.status(500).json({ message: "internal server error" });
