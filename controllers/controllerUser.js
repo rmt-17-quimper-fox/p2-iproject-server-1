@@ -92,7 +92,10 @@ class ControllerUser {
       if(!productId) {
         throw {name: 'bad request'}
       }
- 
+      const product = await Product.findOne({ where: { id: productId || null } });
+      if (!product) {
+        throw {name: 'NotFound'}
+      }
       const deleteProduct = await Product.destroy({ where: { id: productId } });
       if(!deleteProduct) {
         throw {name: 'NotFound'}
