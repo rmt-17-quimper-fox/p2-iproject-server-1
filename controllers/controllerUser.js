@@ -1,6 +1,7 @@
 const { User, Product } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { comparePassword } = require("../helpers/bCrypt");
+const sendEmail = require('../helpers/nodemailer')
 
 class ControllerUser {
   static async register(req, res, next) {
@@ -17,9 +18,10 @@ class ControllerUser {
         gender,
       };
       const result = await User.create(payload);
-      res
-        .status(201)
-        .json({ id: result.id, name: result.name, email: result.email });
+      const content = `Hi ${payload.name}!, your account with email ${payload.email} successfully registered.`
+      const subject = `Information Registered`
+      sendEmail(result, content, subject)
+      res.status(201).json({ id: result.id, name: result.name, email: result.email });
     } catch (err) {
       next(err);
     }
@@ -71,6 +73,9 @@ class ControllerUser {
   static async deleteProduct(req, res, next) {
     try {
       const productId = Number(req.params.productId)
+      if(!productId) {
+        throw {name: 'NotFound'}
+      }
       const deleteProduct = await Product.destroy({ where: { id: productId } });
       if(!deleteProduct) {
         throw {name: 'NotFound'}
