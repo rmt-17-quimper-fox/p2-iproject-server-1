@@ -16,9 +16,15 @@ const authorizationAdmin = async (req, res, next) => {
     try {
         const { id } = req.user
         const productId = Number(req.params.productId);
+        if(!productId) {
+            throw {name: 'bad request'}
+          }
         const product = await Product.findOne({ where: { id: productId || null } });
+        if (!product) {
+            throw {name: 'NotFound'}
+          }
         if(id !== product.authorId) {
-            throw {name: 'CustUnauthorized'}
+            throw {name: 'AdmintUnauthorized'}
         }
           next()
       } catch (err) {
@@ -31,8 +37,14 @@ const authorizzationCustomer = async (req, res, next) => {
     try {
       const { id } = req.user
       const cartId = Number(req.params.cartId);
+      if (!cartId) {
+          throw {name: 'cart NotFound'}
+      }
         // console.log(id, '<<<<<<<==========');
       const cart = await Cart.findOne({ where: { id: cartId || null } });
+      if (!cart) {
+        throw {name: 'cart NotFound'}
+    }
       if(id !== cart.userId) {
           throw {name: 'CustUnauthorized'}
       }
