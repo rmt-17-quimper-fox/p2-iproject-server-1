@@ -23,7 +23,6 @@ _Response (201 - create)_
     "email": <string>
 }
 
-
 _Response (400 - Bad Request)_
 {
     "message": [

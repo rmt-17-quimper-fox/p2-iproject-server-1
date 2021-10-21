@@ -137,6 +137,13 @@ class OrderController {
       next(err);
     }
   }
+  static async notifPayment(req, res, next) {
+    try {
+      
+    } catch (err) {
+      
+    }
+  }
 }
 
 module.exports = OrderController;
