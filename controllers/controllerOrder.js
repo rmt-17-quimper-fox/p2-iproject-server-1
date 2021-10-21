@@ -3,7 +3,10 @@ const { Cart, Category, User, Product } = require("../models");
 class OrderController {
   static async checkout(req, res, next) {
     try {
-      const { productId } = req.params;
+      const productId  = Number(req.params.productId);
+      if (!productId) {
+          throw {name: 'ProductNotFound'}
+      }
       const { id: userId } = req.user;
 
       const product = await Product.findByPk(productId);
@@ -130,7 +133,7 @@ class OrderController {
       }
       res.status(200).json({ message: `Succes Remove from Cart` });
     } catch (err) {
-      console.log(err);
+
       next(err);
     }
   }

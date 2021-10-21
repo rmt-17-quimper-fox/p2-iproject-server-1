@@ -10,10 +10,10 @@ const errorHandler = (err, req, res, next) => {
       res.status(400).json({ message });
       break;
     case "JsonWebTokenError":
-      res.status(400).json({ message: "You must Log In first!" });
+      res.status(401).json({ message: "You must Log In first!" });
       break;
     case "Forbidden":
-      res.status(401).json({ message: "Forbidden Access" });
+      res.status(403).json({ message: "Forbidden Access" });
       break;
     case "LoginFailed":
       res.status(401).json({ message: "Invalid Email/Password" });
@@ -33,11 +33,14 @@ const errorHandler = (err, req, res, next) => {
     case "cart NotFound":
       res.status(404).json({ message: "Cart Not Found" });
       break;
-    case 'CartNotFound':
+    case "CartNotFound":
       res.status(404).json({ message: "Cart NotFound" });
       break;
-      case 'CustUnauthorized':
-      res.status(404).json({ message: "can't access" });
+    case "CustUnauthorized":
+      res.status(403).json({ message: "can't access" });
+      break;
+    case "AdmintUnauthorized":
+      res.status(403).json({ message: "Forbidden Access" });
       break;
     default:
       res.status(500).json({ message: "internal server error" });
